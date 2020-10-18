@@ -1,3 +1,4 @@
+# TextJSAdventureGame
 # To run game: 
  
 ## System Requirements: <br/>
@@ -17,4 +18,4 @@ a) Open VSC <br/>
 b) Open folder with newProject<br/>
 c) Open new bash Terminal in VSC<br/>
 d) Write in terminal node new Proj.js<br/>
- # TextJSAdventureGame
+

@@ -15,17 +15,17 @@ var haveMap = false;
 var haveKey = false;
 var riddleSolved = false;
 
-var left = 'Left'
-var right = 'Right'
-var front = 'Front'
-var back = 'Back';
-var map = 'Map';
-var pickUpMap = 'Pick up map';
-var pickUpKey = 'Pick up key';
-var firstDoor = 'First door'
-var secondDoor = 'Second door'
-var openTheDoor = 'Open the door'
-var guessTheRiddle = 'Guess the riddle'
+const left = 'Left'
+const right = 'Right'
+const front = 'Front'
+const back = 'Back';
+const map = 'Map';
+const pickUpMap = 'Pick up map';
+const pickUpKey = 'Pick up key';
+const firstDoor = 'First door'
+const secondDoor = 'Second door'
+const openTheDoor = 'Open the door'
+const guessTheRiddle = 'Guess the riddle'
 
 //Main game
 function letsPlayGame() {

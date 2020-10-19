@@ -15,6 +15,18 @@ var haveMap = false;
 var haveKey = false;
 var riddleSolved = false;
 
+var left = 'Left'
+var right = 'Right'
+var front = 'Front'
+var back = 'Back';
+var map = 'Map';
+var pickUpMap = 'Pick up map';
+var pickUpKey = 'Pick up key';
+var firstDoor = 'First door'
+var secondDoor = 'Second door'
+var openTheDoor = 'Open the door'
+var guessTheRiddle = 'Guess the riddle'
+
 //Main game
 function letsPlayGame() {
     console.clear();
@@ -61,9 +73,8 @@ function bottomTunnelClosed() {
     console.clear();
 
     var radioDoorOne = new Radio({
-        name: 'radioDoor',
         message: importMessages.noWayBackPartToOne + chalk.yellow(playerName) + importMessages.noWayBackPartToTwo,
-        choices: ['Back'],
+        choices: [back],
     });
 
     radioDoorOne.ask(function (doorSecondOpen) {
@@ -74,36 +85,35 @@ function bottomTunnelClosed() {
 //Middle tunnel
 function inTheMiddleOfTunnels() {
     console.clear();
-    var options = ['Left', 'Front', 'Right', 'Back'];
+    var options = [left, front, right, back];
     if (haveMap) {
-        options.push('Map');
+        options.push(map);
     }
 
     var radioTunnel = new Radio({
-        name: 'radioTunnel',
         message: (importMessages.questionBottomTunnel),
         choices: options,
     });
 
     radioTunnel.ask(function (tunnelChoice) {
         switch (tunnelChoice) {
-            case 'Left': {
+            case left: {
                 leftTunnel();
                 break;
             }
-            case 'Front': {
+            case front: {
                 frontTunnel();
                 break;
             }
-            case 'Back': {
+            case back: {
                 bottomTunnelClosed();
                 break;
             }
-            case 'Right': {
+            case right: {
                 mainRoom();
                 break;
             }
-            case 'Map': {
+            case map: {
                 showMap(0);
                 inTheMiddleOfTunnels();
                 break;
@@ -120,31 +130,30 @@ function leftTunnel() {
     console.clear();
     console.log(importMessages.mainTunnelMessage);
 
-    var options = ['Back'];
+    var options = [back];
     if (haveMap) {
-        options.push('Map');
+        options.push(map);
     } else {
-        options.push('Pick up map');
+        options.push(pickUpMap);
     }
 
     var radioTunnel = new Radio({
-        name: 'radioTunnel',
         message: haveMap ? importMessages.questionLeftTunnelWhenHaveMap : importMessages.questionLeftTunnelWhenDontHaveMap,
         choices: options,
     });
 
     radioTunnel.ask(function (tunnelChoice) {
         switch (tunnelChoice) {
-            case 'Back': {
+            case back: {
                 inTheMiddleOfTunnels();
                 break;
             }
-            case 'Pick up map': {
+            case pickUpMap: {
                 haveMap = true;
                 leftTunnel();
                 break;
             }
-            case 'Map': {
+            case map: {
                 showMap(1);
                 leftTunnel();
                 break;
@@ -169,12 +178,11 @@ function frontTunnel() {
 function frontTunnelClosed() {
     console.clear();
     var radioTunnel = new Radio({
-        name: 'radioTunnel',
         message: importMessages.frontTunnelCloseMessageFirstPart + chalk.yellow(playerName) + importMessages.frontTunnelCloseMessageSecondPart,
-        choices: ['Back'],
+        choices: [back],
     });
     radioTunnel.ask(function (tunnelChoice) {
-        if (tunnelChoice == 'Back') {
+        if (tunnelChoice == back) {
             inTheMiddleOfTunnels();
         } else {
             frontTunnel();
@@ -186,33 +194,32 @@ function frontTunnelClosed() {
 function frontTunnelOpen() {
     console.clear();
     console.log(importMessages.goToOpenFrontTunnelMessage);
-    var options = ['Back'];
+    var options = [back];
     if (haveMap) {
-        options.push('Map');
+        options.push(map);
     }
 
     if (!haveKey) {
-        options.push('Pick up key');
+        options.push(pickUpKey);
     }
 
     var radioTunnel = new Radio({
-        name: 'radioTunnel',
         message: haveKey ? importMessages.questionFrontTunnelWhenHaveKey : importMessages.questionFrontTunnelWhenDontHaveKey,
         choices: options,
     });
 
     radioTunnel.ask(function (tunnelChoice) {
         switch (tunnelChoice) {
-            case 'Back': {
+            case back: {
                 inTheMiddleOfTunnels();
                 break;
             }
-            case 'Map': {
+            case map: {
                 showMap(3);
                 frontTunnel();
                 break;
             }
-            case 'Pick up key': {
+            case pickUpKey: {
                 haveKey = true;
                 frontTunnel();
                 break;
@@ -229,33 +236,32 @@ function mainRoom() {
     console.clear();
     console.log(importMessages.goToLargeRoomMessage);
 
-    var options = ['First door', 'Back'];
+    var options = [firstDoor, back];
     if (haveMap) {
-        options.push('Second door');
-        options.push('Map');
+        options.push(secondDoor);
+        options.push(map);
     }
 
     var radioMainRoom = new Radio({
-        name: 'radioDoor',
         message: haveMap ? importMessages.questionMainRoomWhenHaveMap : importMessages.questionMainRoomWhenDontHaveMap,
         choices: options,
     });
 
     radioMainRoom.ask(function (choiceDoor) {
         switch (choiceDoor) {
-            case 'First door': {
+            case firstDoor: {
                 doorOne()
                 break;
             }
-            case 'Second door': {
+            case secondDoor: {
                 doorTwoHidden();
                 break;
             }
-            case 'Back': {
+            case back: {
                 inTheMiddleOfTunnels();
                 break;
             }
-            case 'Map': {
+            case map: {
                 showMap(2);
                 mainRoom();
                 break;
@@ -306,18 +312,17 @@ function puzzleGameRepeat(yourNumber, numberToGuess) {
 function doorOne() {
     console.clear();
     console.log(importMessages.tryOpenFirstDoorMainRoom);
-    var options = ['Back'];
+    var options = [back];
     if (haveKey) {
-        options.push('Open the door');
+        options.push(openTheDoor);
     }
     var radioDoorOne = new Radio({
-        name: 'radioDoor',
         message: haveKey ? importMessages.doorOneOpenMessage : importMessages.doorOneCloseMessage,
         choices: options,
     });
     radioDoorOne.ask(function (doorSecondOpen) {
         console.log(importMessages.doorSecondOpen);
-        if (doorSecondOpen == 'Open the door') {
+        if (doorSecondOpen == openTheDoor) {
             console.clear();
             console.log(chalk.green(importMessages.doorOneWinAGamePartOne + chalk.yellow(playerName) + importMessages.doorOneWinAGamePartTwo))
             repeatMainGame()
@@ -331,18 +336,17 @@ function doorOne() {
 function doorTwoHidden() {
     console.clear();
     console.log(importMessages.tryOpenSecondDoorMainRoom);
-    var options = ['Back'];
+    var options = [back];
     if (!riddleSolved) {
-        options.push('Guess the riddle');
+        options.push(guessTheRiddle);
     }
     var radioDoorOne = new Radio({
-        name: 'radioDoor',
         message: riddleSolved ? importMessages.doorOneOpenRiddleSolvedMessage : importMessages.doorOneCloseRiddleDontSolvedMessage,
         choices: options,
     });
     radioDoorOne.ask(function (doorOneOpen) {
         console.log(importMessages.doorOneOpen);
-        if (doorOneOpen == 'Guess the riddle') {
+        if (doorOneOpen == guessTheRiddle) {
             puzzleGame()
         } else {
             mainRoom()
@@ -384,5 +388,3 @@ function repeatMainGame() {
 }
 
 letsPlayGame();
-
-

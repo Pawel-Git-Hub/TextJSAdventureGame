@@ -1,15 +1,17 @@
 //Imports node
-const chalk = require('chalk');
-const Confirm = require('prompt-confirm');
-const prompt = require('prompt-sync')({ sigint: true });
-const Radio = require('prompt-radio');
+import chalk from 'chalk';
+const { yellow, green } = chalk;
+import Confirm from 'prompt-confirm';
+import promptSync from 'prompt-sync';
+const prompt = promptSync({ sigint: true });
+import Radio from 'prompt-radio';
 
 //Import messages and maps
-var importMap = require('./Maps.js');
-var importMessages = require('./Messages')
+import { mapList } from './Maps.js';
+import { invitationMessage, startFailMessage, invite, lastChanceToGoBack, startFailMessageTwo, noWayBackPartToOne, noWayBackPartToTwo, questionBottomTunnel, mainTunnelMessage, questionLeftTunnelWhenHaveMap, questionLeftTunnelWhenDontHaveMap, frontTunnelCloseMessageFirstPart, frontTunnelCloseMessageSecondPart, goToOpenFrontTunnelMessage, questionFrontTunnelWhenHaveKey, questionFrontTunnelWhenDontHaveKey, goToLargeRoomMessage, questionMainRoomWhenHaveMap, questionMainRoomWhenDontHaveMap, promptPuzzleGameYourNumberMessage, yourNumberPuzzleGameMessage, drawnNumberPuzzleGameMessage, winPuzzleGameMessage, lostPuzzleGameMessage, confirmRepeatPuzzleGameMessage, tryOpenFirstDoorMainRoom, doorOneOpenMessage, doorOneCloseMessage, doorOneWinAGamePartOne, doorOneWinAGamePartTwo, tryOpenSecondDoorMainRoom, doorOneOpenRiddleSolvedMessage, doorOneCloseRiddleDontSolvedMessage, errorMapPrintMessage, repeatGameQuestionMessage, repeatGameEndMessage } from './Messages.js';
 
 //Variables 
-let playerName = chalk.yellow('Unknown');
+let playerName = yellow('Unknown');
 let haveMap = false;
 let haveKey = false;
 let riddleSolved = false;
@@ -36,13 +38,13 @@ function letsPlayGame() {
 //Start space 
 function startSpace() {
     console.clear();
-    const questionOne = new Confirm(importMessages.invitationMessage);
+    const questionOne = new Confirm(invitationMessage);
     questionOne.ask(function (enterCave) {
         if (enterCave == true) {
             bottomTunnel();
         } else {
             console.clear();
-            console.log(importMessages.startFailMessage);
+            console.log(startFailMessage);
             repeatMainGame();
         }
     });
@@ -50,19 +52,19 @@ function startSpace() {
 
 //Ask for traveler name
 function askForTravelerName() {
-    playerName = prompt(importMessages.invite);
+    playerName = prompt(invite);
 }
 
 //Bottom tunnel
 function bottomTunnel() {
     console.clear();
-    const questionOne = new Confirm(importMessages.lastChanceToGoBack);
+    const questionOne = new Confirm(lastChanceToGoBack);
     questionOne.ask(function (enterCave) {
         if (enterCave == true) {
             inTheMiddleOfTunnels();
         } else {
             console.clear();
-            console.log(importMessages.startFailMessageTwo);
+            console.log(startFailMessageTwo);
             repeatMainGame();
         }
     });
@@ -72,7 +74,7 @@ function bottomTunnelClosed() {
     console.clear();
 
     let radioDoorOne = new Radio({
-        message: importMessages.noWayBackPartToOne + chalk.yellow(playerName) + importMessages.noWayBackPartToTwo,
+        message: noWayBackPartToOne + yellow(playerName) + noWayBackPartToTwo,
         choices: [back],
     });
 
@@ -90,7 +92,7 @@ function inTheMiddleOfTunnels() {
     }
 
     let radioTunnel = new Radio({
-        message: (importMessages.questionBottomTunnel),
+        message: (questionBottomTunnel),
         choices: options,
     });
 
@@ -127,7 +129,7 @@ function inTheMiddleOfTunnels() {
 //Left tunnel 
 function leftTunnel() {
     console.clear();
-    console.log(importMessages.mainTunnelMessage);
+    console.log(mainTunnelMessage);
 
     let options = [back];
     if (haveMap) {
@@ -137,7 +139,7 @@ function leftTunnel() {
     }
 
     let radioTunnel = new Radio({
-        message: haveMap ? importMessages.questionLeftTunnelWhenHaveMap : importMessages.questionLeftTunnelWhenDontHaveMap,
+        message: haveMap ? questionLeftTunnelWhenHaveMap : questionLeftTunnelWhenDontHaveMap,
         choices: options,
     });
 
@@ -177,7 +179,7 @@ function frontTunnel() {
 function frontTunnelClosed() {
     console.clear();
     let radioTunnel = new Radio({
-        message: importMessages.frontTunnelCloseMessageFirstPart + chalk.yellow(playerName) + importMessages.frontTunnelCloseMessageSecondPart,
+        message: frontTunnelCloseMessageFirstPart + yellow(playerName) + frontTunnelCloseMessageSecondPart,
         choices: [back],
     });
     radioTunnel.ask(function (tunnelChoice) {
@@ -192,7 +194,7 @@ function frontTunnelClosed() {
 //Front tunnel open
 function frontTunnelOpen() {
     console.clear();
-    console.log(importMessages.goToOpenFrontTunnelMessage);
+    console.log(goToOpenFrontTunnelMessage);
     let options = [back];
     if (haveMap) {
         options.push(map);
@@ -203,7 +205,7 @@ function frontTunnelOpen() {
     }
 
     let radioTunnel = new Radio({
-        message: haveKey ? importMessages.questionFrontTunnelWhenHaveKey : importMessages.questionFrontTunnelWhenDontHaveKey,
+        message: haveKey ? questionFrontTunnelWhenHaveKey : questionFrontTunnelWhenDontHaveKey,
         choices: options,
     });
 
@@ -233,7 +235,7 @@ function frontTunnelOpen() {
 // Main room 
 function mainRoom() {
     console.clear();
-    console.log(importMessages.goToLargeRoomMessage);
+    console.log(goToLargeRoomMessage);
 
     let options = [firstDoor, back];
     if (haveMap) {
@@ -242,7 +244,7 @@ function mainRoom() {
     }
 
     let radioMainRoom = new Radio({
-        message: haveMap ? importMessages.questionMainRoomWhenHaveMap : importMessages.questionMainRoomWhenDontHaveMap,
+        message: haveMap ? questionMainRoomWhenHaveMap : questionMainRoomWhenDontHaveMap,
         choices: options,
     });
 
@@ -275,12 +277,12 @@ function mainRoom() {
 // Puzzle game door second 
 function puzzleGame() {
     console.clear();
-    let yourNumber = parseInt(prompt(importMessages.promptPuzzleGameYourNumberMessage));
+    let yourNumber = parseInt(prompt(promptPuzzleGameYourNumberMessage));
     const numberToGuess = Math.floor(Math.random() * 5) + 1;
     if (yourNumber == numberToGuess) {
-        console.log(importMessages.yourNumberPuzzleGameMessage, yourNumber);
-        console.log(importMessages.drawnNumberPuzzleGameMessage, numberToGuess);
-        console.log(importMessages.winPuzzleGameMessage);
+        console.log(yourNumberPuzzleGameMessage, yourNumber);
+        console.log(drawnNumberPuzzleGameMessage, numberToGuess);
+        console.log(winPuzzleGameMessage);
         riddleSolved = true
         prompt();
         mainRoom()
@@ -293,10 +295,10 @@ function puzzleGame() {
 //Puzzle game door second repeat game 
 function puzzleGameRepeat(yourNumber, numberToGuess) {
     console.clear();
-    console.log(importMessages.yourNumberPuzzleGameMessage, yourNumber);
-    console.log(importMessages.drawnNumberPuzzleGameMessage, numberToGuess);
-    console.log(importMessages.lostPuzzleGameMessage);
-    const playAgain = new Confirm(importMessages.confirmRepeatPuzzleGameMessage);
+    console.log(yourNumberPuzzleGameMessage, yourNumber);
+    console.log(drawnNumberPuzzleGameMessage, numberToGuess);
+    console.log(lostPuzzleGameMessage);
+    const playAgain = new Confirm(confirmRepeatPuzzleGameMessage);
     playAgain.ask(function (playAgainGame) {
         if (playAgainGame == true) {
             puzzleGame();
@@ -310,20 +312,20 @@ function puzzleGameRepeat(yourNumber, numberToGuess) {
 //Door one 
 function doorOne() {
     console.clear();
-    console.log(importMessages.tryOpenFirstDoorMainRoom);
+    console.log(tryOpenFirstDoorMainRoom);
     let options = [back];
     if (haveKey) {
         options.push(openTheDoor);
     }
     let radioDoorOne = new Radio({
-        message: haveKey ? importMessages.doorOneOpenMessage : importMessages.doorOneCloseMessage,
+        message: haveKey ? doorOneOpenMessage : doorOneCloseMessage,
         choices: options,
     });
     radioDoorOne.ask(function (doorSecondOpen) {
-        console.log(importMessages.doorSecondOpen);
+        console.log(doorSecondOpen);
         if (doorSecondOpen == openTheDoor) {
             console.clear();
-            console.log(chalk.green(importMessages.doorOneWinAGamePartOne + chalk.yellow(playerName) + importMessages.doorOneWinAGamePartTwo))
+            console.log(green(doorOneWinAGamePartOne + yellow(playerName) + doorOneWinAGamePartTwo))
             repeatMainGame()
         } else {
             mainRoom();
@@ -334,17 +336,17 @@ function doorOne() {
 //Door two hidden 
 function doorTwoHidden() {
     console.clear();
-    console.log(importMessages.tryOpenSecondDoorMainRoom);
+    console.log(tryOpenSecondDoorMainRoom);
     let options = [back];
     if (!riddleSolved) {
         options.push(guessTheRiddle);
     }
     let radioDoorOne = new Radio({
-        message: riddleSolved ? importMessages.doorOneOpenRiddleSolvedMessage : importMessages.doorOneCloseRiddleDontSolvedMessage,
+        message: riddleSolved ? doorOneOpenRiddleSolvedMessage : doorOneCloseRiddleDontSolvedMessage,
         choices: options,
     });
     radioDoorOne.ask(function (doorOneOpen) {
-        console.log(importMessages.doorOneOpen);
+        console.log(doorOneOpen);
         if (doorOneOpen == guessTheRiddle) {
             puzzleGame()
         } else {
@@ -355,10 +357,10 @@ function doorTwoHidden() {
 
 //Get map part one  
 function getMap(expr) {
-    if (importMap.mapList.length > expr) {
-        return importMap.mapList[expr];
+    if (mapList.length > expr) {
+        return mapList[expr];
     } else {
-        return importMessages.errorMapPrintMessage;
+        return errorMapPrintMessage;
     }
 }
 
@@ -374,12 +376,12 @@ function showMap(id) {
 //Repeat main game 
 function repeatMainGame() {
     //console.clear();
-    const playAgain = new Confirm(importMessages.repeatGameQuestionMessage + chalk.yellow(playerName) + '?');
+    const playAgain = new Confirm(repeatGameQuestionMessage + yellow(playerName) + '?');
     playAgain.ask(function (playAgainGame) {
         if (playAgainGame == true) {
             letsPlayGame();
         } else {
-            console.log(importMessages.repeatGameEndMessage);
+            console.log(repeatGameEndMessage);
             prompt();
             console.clear();
         }

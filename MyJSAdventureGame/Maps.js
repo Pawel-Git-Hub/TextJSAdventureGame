@@ -123,6 +123,4 @@ const mapList = [
 ];
 
 //Export Maps
-module.exports = {
-    mapList: mapList
-};
+export {mapList};
